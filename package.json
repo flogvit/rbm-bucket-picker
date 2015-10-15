@@ -1,0 +1,33 @@
+{
+  "name": "rbm-bucket-picker",
+  "version": "0.1.0",
+  "description": "Bucket Picker",
+  "main": "index.js",
+  "dependencies": {
+    "async": ""
+  },
+  "devDependencies": {
+    "mocha": "",
+    "should": ""
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "engines": {
+    "node": ">0.10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flogvit/rbm-bucket-picker.git"
+  },
+  "keywords": [
+    "bucket",
+    "rbm"
+  ],
+  "author": "Vegard Hanssen <vegard@cellarlabs.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/flogvit/rbm-bucket-picker/issues"
+  },
+  "homepage": "https://github.com/flogvit/rbm-bucket-picker#readme"
+}
