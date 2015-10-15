@@ -12,4 +12,9 @@ var bp = new picker.Picker(2);
 console.log(bp.pick(300));
 
 // 2
+
+bp.setBucketCount(3);
+console.log(bp.pick(300));
+
+// 3
 ```
