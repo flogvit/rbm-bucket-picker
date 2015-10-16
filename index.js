@@ -27,23 +27,64 @@ function BucketPicker(count) {
  * @constructor
  */
 
-function Bucket(position) {
-  this.bucket = Number(position) !== null ? Number(position) : 0;
+function Bucket(position, count) {
+  this.bucket = position ? position : 1;
   this.numbers = [];
+  this.bp = new BucketPicker(count ? count : 1);
 }
 
-BucketPicker.prototype.setBuckets = function(count) {
+/**
+ * Set the bucket count
+ * @param count
+ */
+BucketPicker.prototype.setBucketCount = function(count) {
   this.buckets = count;
 }
 
-Bucket.prototype.addNumber = function(number) {
+/**
+ * Add a number to the bucket, regardless of the bucket should own it
+ * @param number
+ */
+Bucket.prototype.add = function(number) {
   this.numbers.push(number);
 }
 
+/**
+ * Check if a number should fall into this bucket
+ *
+ * @param number
+ * @returns {boolean}
+ */
+Bucket.prototype.isMine = function(number) {
+  return this.bp.pick(number)===this.bucket;
+}
+
+/**
+ * Remove a number from the bucket
+ * @param number
+ */
+Bucket.prototype.remove = function(number) {
+  var i = this.numbers.indexOf(number);
+  if (i>-1)
+    this.numbers.splice(i, 1);
+}
+
+/**
+ * Set the count of buckets, so the bucket can move away the numbers
+ * which is does not own
+ *
+ * @param count     The new count of buckets
+ * @param move      The function to do the move. move(number, callback)
+ * @param callback  Function to call when done with all the moves
+ */
 Bucket.prototype.setBucketCount = function(count, move, callback) {
+  var self = this;
   var bp = new BucketPicker(count);
-  async.eachLimit(this.numbers, 1, function(number, cb) {
-    if (bp.pick(number)!==this.bucket) {
+  // Make a copy of the number array, so .splice in .remove does not change it
+  var numbers = this.numbers.slice(0);
+  // Do not lock the process
+  async.eachLimit(numbers, 1, function(number, cb) {
+    if (bp.pick(number)!==self.bucket) {
       move(number, function(err) {
         if (err)
           cb(err)
@@ -56,6 +97,9 @@ Bucket.prototype.setBucketCount = function(count, move, callback) {
   })
 }
 
+Bucket.prototype.has = function(number) {
+  return this.numbers.indexOf(number)>-1;
+}
 
 /**
  * Pick the bucket for a number
@@ -87,7 +131,7 @@ Bucket.prototype.setBucketCount = function(count, move, callback) {
  * you should do is to delete 2, and move the last one to 2. This way you only need to move
  * entries from the last one and 2.
  *
- * When I created this function I needed it for picking loadbalancing nodes, but it can be
+ * When I created this function I needed it for picking load balancing nodes, but it can be
  * used for much more
  *
  * @param number

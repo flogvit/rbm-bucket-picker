@@ -13,7 +13,7 @@ require('assert');
 var bucketpicker = require('../index.js');
 var picker = new bucketpicker.Picker();
 
-describe('Checking picker', function() {
+describe('Checking Picker', function() {
   var its = [
     {
       text: 'Initial test',
@@ -44,7 +44,7 @@ describe('Checking picker', function() {
   its.forEach(function(entry) {
     it('should do '+entry.text, function(done) {
       if ('numbers' in entry) {
-        picker.setBuckets(entry.buckets);
+        picker.setBucketCount(entry.buckets);
         for (var pos = 0; pos < entry.numbers.length; pos++) {
           picker.pick(entry.numbers[pos]).should.equal(entry.answers[pos]);
         }
